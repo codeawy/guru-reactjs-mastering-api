@@ -18,6 +18,7 @@ const Paginator = ({ page, lastPage, total, onPrev, onNext }: PaginatorProps) =>
         <button
           className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           onClick={onPrev}
+          disabled={page === 1}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -39,6 +40,7 @@ const Paginator = ({ page, lastPage, total, onPrev, onNext }: PaginatorProps) =>
         <button
           className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           onClick={onNext}
+          disabled={page === lastPage}
         >
           Next
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true" viewBox="0 0 14 10">

@@ -8,13 +8,11 @@ import { useState } from "react";
 const ProductsPage = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(15);
+
   const { data, isLoading } = useFetchQuery({
     url: `/products?pagination[page]=${page}&pagination[pageSize]=${pageSize}`,
-    queryKey: ["products", page],
+    queryKey: ["products", page, pageSize],
   });
-  const {
-    meta: { pagination },
-  } = data;
 
   const onGenerate = () => {
     for (let i = 0; i < 75; i++) {
@@ -24,10 +22,14 @@ const ProductsPage = () => {
     }
   };
 
-  const onPrevPage = () => {};
+  const onPrevPage = () => {
+    if (page === 1) return;
+    setPage(prev => prev - 1);
+  };
+
   const onNextPage = () => {
+    if (page === data.meta.pagination.pageCount) return;
     setPage(prev => prev + 1);
-    console.log(page);
   };
 
   if (isLoading) {
@@ -48,13 +50,21 @@ const ProductsPage = () => {
         <h3>No products</h3>
       )}
       {data?.data?.length && (
-        <Paginator
-          total={pagination.total}
-          page={pagination.page}
-          lastPage={pagination.pageCount}
-          onPrev={onPrevPage}
-          onNext={onNextPage}
-        />
+        <div className="flex items-center justify-between my-10">
+          <select value={pageSize} onChange={e => setPageSize(+e.target.value)}>
+            <option value="15">15 per page</option>
+            <option value="30">30 per page</option>
+            <option value="50">50 per page</option>
+            <option value="100">100 per page</option>
+          </select>
+          <Paginator
+            total={data.meta.pagination.total}
+            page={data.meta.pagination.page}
+            lastPage={data.meta.pagination.pageCount}
+            onPrev={onPrevPage}
+            onNext={onNextPage}
+          />
+        </div>
       )}
     </div>
   );
