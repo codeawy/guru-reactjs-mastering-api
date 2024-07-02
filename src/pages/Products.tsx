@@ -8,10 +8,11 @@ import { useState } from "react";
 const ProductsPage = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(15);
+  const [sortBy, setSortBy] = useState<string>("desc");
 
   const { data, isLoading } = useFetchQuery({
-    url: `/products?pagination[page]=${page}&pagination[pageSize]=${pageSize}`,
-    queryKey: ["products", page, pageSize],
+    url: `/products?pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort[0]=createdAt:${sortBy}`,
+    queryKey: ["products", page, pageSize, sortBy],
   });
 
   const onGenerate = () => {
@@ -51,6 +52,11 @@ const ProductsPage = () => {
       )}
       {data?.data?.length && (
         <div className="flex items-center justify-between my-10">
+          <select value={sortBy} onChange={e => setSortBy(e.target.value)}>
+            <option value="asc">Older</option>
+            <option value="desc">Newest</option>
+          </select>
+
           <select value={pageSize} onChange={e => setPageSize(+e.target.value)}>
             <option value="15">15 per page</option>
             <option value="30">30 per page</option>

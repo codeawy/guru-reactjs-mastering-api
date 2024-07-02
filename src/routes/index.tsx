@@ -4,6 +4,7 @@ import DashboardLayout from "../layouts/Dashboard";
 import ProductsPage from "../pages/Products";
 import PrivateRoute from "../components/auth/PrivateRoute";
 import UsersPage from "../pages/Users";
+import LoginPage from "@/pages/Login";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -16,8 +17,8 @@ const router = createBrowserRouter(
         <Route
           path="login"
           element={
-            <PrivateRoute isAllowed={false} redirectPath="/">
-              <h1>Login page</h1>
+            <PrivateRoute isAllowed redirectPath="/">
+              <LoginPage />
             </PrivateRoute>
           }
         />
