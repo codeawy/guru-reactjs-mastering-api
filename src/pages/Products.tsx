@@ -4,11 +4,14 @@ import apiInstance from "../config/axios";
 import { generateProductsFakeData } from "../helpers/fakeData";
 import useFetchQuery from "../hooks/useFetchQuery";
 import { useState } from "react";
+import CookiesService from "@/services/Cookies";
 
 const ProductsPage = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(15);
   const [sortBy, setSortBy] = useState<string>("desc");
+
+  const cookieService = new CookiesService();
 
   const { data, isLoading } = useFetchQuery({
     url: `/products?pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort[0]=createdAt:${sortBy}`,
@@ -16,11 +19,19 @@ const ProductsPage = () => {
   });
 
   const onGenerate = () => {
-    for (let i = 0; i < 75; i++) {
-      apiInstance.post("/products", {
-        data: generateProductsFakeData(),
-      });
-    }
+    const token = cookieService.get("userCredentials")?.jwt;
+
+    apiInstance.post(
+      "/products",
+      {
+        data: generateProductsFakeData(1),
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   };
 
   const onPrevPage = () => {
